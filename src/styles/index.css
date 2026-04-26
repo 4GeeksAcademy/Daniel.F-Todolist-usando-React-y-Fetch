@@ -9,3 +9,134 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+
+/* Fondo más suave y cálido */
+body {
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  font-family: Arial, sans-serif;
+}
+
+/* CENTRADO */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 60px;
+}
+
+/* TARJETA MÁS AMIGABLE */
+.todo-card {
+  background: #fff;
+  width: 420px;
+  padding: 20px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* TÍTULO MÁS “CASUAL” */
+.title {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* FORM */
+form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+form input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+}
+
+form input:focus {
+  border-color: #8e44ad;
+  box-shadow: 0 0 5px rgba(142, 68, 173, 0.3);
+}
+
+/* BOTÓN AGREGAR */
+form button {
+  background: #8e44ad;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+form button:hover {
+  background: #732d91;
+}
+
+/* LISTA */
+.todo-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* ITEM tipo “tarjetita pequeña” */
+.todo-item {
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.todo-item:hover {
+  transform: scale(1.02);
+  background: #f1f1f1;
+}
+
+/* INPUT TAREA */
+.todo-item input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  font-size: 15px;
+}
+
+/* BOTÓN DELETE MÁS SUAVE */
+.delete-btn {
+  opacity: 0;
+  transition: 0.2s;
+  background: #ff4d4d;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.todo-item:hover .delete-btn {
+  opacity: 1;
+}
+
+/* BOTÓN LIMPIAR */
+.clear-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: #ff7675;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.clear-btn:hover {
+  background: #e55039;
+}

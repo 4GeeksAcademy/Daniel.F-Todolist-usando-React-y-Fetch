@@ -1,28 +1,149 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import TodoForm from "./TodoForm";
+import TodoItem from "./TodoItem";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+export default function Home() {  // Ya aquí estoy haciendo la exportación del Home.
+	const [tasks, setTasks] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [creating, setCreating] = useState(false);
 
-//create your first component
-const Home = () => {
+	const username = "DannyCanario";
+
+	//create your first component
+	// GET tareas
+	const getTasks = async () => {
+		setLoading(true);
+		try {
+			const res = await fetch(`https://playground.4geeks.com/todo/users/${username}`);
+			const data = await res.json();
+			setTasks(data.todos || []);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	// Crear usuario
+	const createUser = async () => {
+		try {
+			await fetch(`https://playground.4geeks.com/todo/users/${username}`, {
+				method: "POST"
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	// POST tarea
+	const createTask = async (label) => {
+		if (!label.trim()) return;
+
+		setCreating(true);
+
+		try {
+			await fetch(`https://playground.4geeks.com/todo/todos/${username}`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					label,
+					is_done: false
+				})
+			});
+
+			await getTasks();
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setCreating(false);
+		}
+	};
+
+	// DELETE
+	const deleteTask = async (id) => {
+		try {
+			await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
+				method: "DELETE"
+			});
+
+			await getTasks();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	// PATCH
+	const updateTask = async (id, label) => {
+		try {
+			await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ label })
+			});
+
+			await getTasks();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	// BORRAR TODO
+	const clearTasks = async () => {
+		try {
+			await fetch(`https://playground.4geeks.com/todo/users/${username}`, {
+				method: "DELETE"
+			});
+
+			setTasks([]);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	// INIT
+	useEffect(() => {
+		const init = async () => {
+			await createUser();
+			await getTasks();
+		};
+		init();
+	}, []);
+
 	return (
-		<div className="text-center">
-            
+  <div className="app-container">
+    <div className="todo-card">
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
-};
+      <h1 className="title">REMEMBER</h1>
 
-export default Home;
+      <TodoForm createTask={createTask} creating={creating} />
+
+      {loading ? (
+        <div className="d-flex justify-content-center mt-3">
+          <div className="spinner-border"></div>
+        </div>
+      ) : (
+        <ul className="todo-list">
+          {tasks.map((task) => (
+            <TodoItem
+              key={task.id}
+              task={task}
+              deleteTask={deleteTask}
+              updateTask={updateTask}
+            />
+          ))}
+        </ul>
+      )}
+
+      <button className="clear-btn" onClick={clearTasks}>
+        Clear all
+      </button>
+
+    </div>
+  </div>
+);
+}
