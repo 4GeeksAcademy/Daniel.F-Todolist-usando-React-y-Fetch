@@ -5,11 +5,11 @@ export default function TodoItem({ task, deleteTask, updateTask }) {
 
   return (
 <li className="todo-item">
-  <input
-    value={editValue}
-    onChange={(e) => setEditValue(e.target.value)}
-    onBlur={() => updateTask(task.id, editValue)}
-  />
+<input
+	type="text"
+	defaultValue={task.label}
+	onKeyDown={(e) => handleKeyDown(e, task.id)}
+/>
 
   <button
     className="delete-btn"

@@ -75,22 +75,22 @@ export default function Home() {  // Ya aquí estoy haciendo la exportación del
 		}
 	};
 
-	// PATCH
-	const updateTask = async (id, label) => {
-		try {
-			await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({ label })
-			});
+	// PUT* (Modificado de Path a Put)
+const updateTask = async (id, updatedTask) => {
+	try {
+		await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify(updatedTask)
+		});
 
-			await getTasks();
-		} catch (error) {
-			console.log(error);
-		}
-	};
+		await getTasks();
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 	// BORRAR TODO
 	const clearTasks = async () => {
