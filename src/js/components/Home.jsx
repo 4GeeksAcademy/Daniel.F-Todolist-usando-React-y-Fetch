@@ -76,21 +76,36 @@ export default function Home() {  // Ya aquí estoy haciendo la exportación del
 	};
 
 	// PUT* (Modificado de Path a Put)
-const updateTask = async (id, updatedTask) => {
-	try {
-		await fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(updatedTask)
-		});
+	const updateTask = async (taskId, newLabel) => {
 
-		await getTasks();
-	} catch (error) {
-		console.log(error);
-	}
-};
+		const updatedTodos = todos.map(todo =>
+			todo.id === taskId
+				? { ...todo, label: newLabel }
+				: todo
+		);
+
+		try {
+			const response = await fetch(
+				"https://playground.4geeks.com/todo/todos/YOUR_USERNAME",
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(updatedTodos)
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Error updating task");
+			}
+
+			setTodos(updatedTodos);
+
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
 	// BORRAR TODO
 	const clearTasks = async () => {
@@ -115,35 +130,35 @@ const updateTask = async (id, updatedTask) => {
 	}, []);
 
 	return (
-  <div className="app-container">
-    <div className="todo-card">
+		<div className="app-container">
+			<div className="todo-card">
 
-      <h1 className="title">REMEMBER</h1>
+				<h1 className="title">REMEMBER</h1>
 
-      <TodoForm createTask={createTask} creating={creating} />
+				<TodoForm createTask={createTask} creating={creating} />
 
-      {loading ? (
-        <div className="d-flex justify-content-center mt-3">
-          <div className="spinner-border"></div>
-        </div>
-      ) : (
-        <ul className="todo-list">
-          {tasks.map((task) => (
-            <TodoItem
-              key={task.id}
-              task={task}
-              deleteTask={deleteTask}
-              updateTask={updateTask}
-            />
-          ))}
-        </ul>
-      )}
+				{loading ? (
+					<div className="d-flex justify-content-center mt-3">
+						<div className="spinner-border"></div>
+					</div>
+				) : (
+					<ul className="todo-list">
+						{tasks.map((task) => (
+							<TodoItem
+								key={todo.id}
+								task={todo}
+								removeTask={removeTask}
+								updateTask={updateTask}
+							/>
+						))}
+					</ul>
+				)}
 
-      <button className="clear-btn" onClick={clearTasks}>
-        Clear all
-      </button>
+				<button className="clear-btn" onClick={clearTasks}>
+					Clear all
+				</button>
 
-    </div>
-  </div>
-);
+			</div>
+		</div>
+	);
 }
