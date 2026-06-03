@@ -76,49 +76,33 @@ export default function Home() {  // Ya aquí estoy haciendo la exportación del
 	};
 
 	// PUT* (Modificado de Path a Put)
-	const updateTask = async (taskId, newLabel) => {
-
-		const updatedTodos = todos.map(todo =>
-			todo.id === taskId
-				? { ...todo, label: newLabel }
-				: todo
-		);
+	const updateTask = async (task) => {
 
 		try {
-			const response = await fetch(
-				"https://playground.4geeks.com/todo/todos/YOUR_USERNAME",
+
+			await fetch(
+				`https://playground.4geeks.com/todo/todos/${task.id}`,
 				{
 					method: "PUT",
 					headers: {
 						"Content-Type": "application/json"
 					},
-					body: JSON.stringify(updatedTodos)
+					body: JSON.stringify({
+						label: task.label,
+						is_done: !task.is_done
+					})
 				}
 			);
 
-			if (!response.ok) {
-				throw new Error("Error updating task");
-			}
-
-			setTodos(updatedTodos);
+			await getTasks();
 
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	// BORRAR TODO
-	const clearTasks = async () => {
-		try {
-			await fetch(`https://playground.4geeks.com/todo/users/${username}`, {
-				method: "DELETE"
-			});
-
-			setTasks([]);
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	// BORRAR TODO*
+	
 
 	// INIT
 	useEffect(() => {
@@ -145,18 +129,15 @@ export default function Home() {  // Ya aquí estoy haciendo la exportación del
 					<ul className="todo-list">
 						{tasks.map((task) => (
 							<TodoItem
-								key={todo.id}
-								task={todo}
-								removeTask={removeTask}
+								key={task.id}
+								task={task}
+								deleteTask={deleteTask}
 								updateTask={updateTask}
 							/>
 						))}
 					</ul>
 				)}
 
-				<button className="clear-btn" onClick={clearTasks}>
-					Clear all
-				</button>
 
 			</div>
 		</div>

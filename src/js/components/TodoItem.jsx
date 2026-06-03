@@ -1,58 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 
-const TodoItem = ({ task, removeTask, updateTask }) => {
-
-    const [isEditing, setIsEditing] = useState(false);
-    const [editValue, setEditValue] = useState(task.label);
-
-    const handleKeyDown = async (e) => {
-
-        if (e.key === "Enter") {
-
-            if (editValue.trim() === "") return;
-
-            await updateTask(task.id, editValue);
-
-            setIsEditing(false);
-        }
-
-        if (e.key === "Escape") {
-            setIsEditing(false);
-            setEditValue(task.label);
-        }
-    };
+const TodoItem = ({ task, deleteTask, updateTask }) => {
 
     return (
 
         <li className="list-group-item d-flex justify-content-between align-items-center">
 
-            {
-                isEditing ? (
+            <div>
 
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        autoFocus
-                    />
+                <input
+                    type="checkbox"
+                    checked={task.is_done}
+                    onChange={() => updateTask(task)}
+                    className="me-2"
+                />
 
-                ) : (
+                <span
+                    style={{
+                        textDecoration: task.is_done ? "line-through" : "none"
+                    }}
+                >
+                    {task.label}
+                </span>
 
-                    <span
-                        style={{ cursor: "pointer" }}
-                        onDoubleClick={() => setIsEditing(true)}
-                    >
-                        {task.label}
-                    </span>
-
-                )
-            }
+            </div>
 
             <button
-                className="btn btn-danger ms-2"
-                onClick={() => removeTask(task.id)}
+                className="btn btn-danger"
+                onClick={() => deleteTask(task.id)}
             >
                 X
             </button>
